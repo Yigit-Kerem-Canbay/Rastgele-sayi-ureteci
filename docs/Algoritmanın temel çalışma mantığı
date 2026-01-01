@@ -1,0 +1,98 @@
+1. Algoritmanın Tanımı ve Çalışma Mantığı
+
+Bu çalışmada kullanılan CDSNG (Cubic Deterministic Seeded Number Generator), matematiksel olarak tanımlanmış basit bir sözde rastgele sayı üretecidir. Algoritma, kullanıcıdan alınan bir başlangıç değeri (seed) ile başlar ve her adımda bu değeri belirli bir kurala göre güncelleyerek yeni sayılar üretir.
+
+Algoritmanın temel fikri şudur: Elimizde her zaman “şu anki sayı” vardır ve biz bu sayıyı, önceden belirlenmiş sabit katsayılarla işleme sokarak bir sonraki sayıyı elde ederiz. Bu işlem yapılırken çarpma, toplama ve mod alma (belli bir sayıya bölümden kalanını alma) gibi basit aritmetik işlemler kullanılır. 
+
+Bu projede kullanılan CDSNG algoritmasında, her yeni sayı bir önceki sayının küpü, karesi ve kendisi kullanılarak üretilmektedir. Yani her adımda “şu anki sayıyı biraz daha karmaşık bir formülden geçirip” yeni bir sayı elde ediyoruz. Son adımda mod işlemi uygulanarak üretilen sayının belirli bir aralıkta kalması sağlanır. Bu sayede sayılar hem çok büyüyüp taşmaz, hem de belli bir sınır içinde dolaşır.
+
+Bu yapı sayesinde:
+- Algoritma hesaplama açısından çok hızlıdır.
+- Ürettiği sayılar ilk bakışta karmaşık ve tahmin edilmesi zor görünür.
+- Ancak algoritma tamamen deterministiktir, yani aynı başlangıç değeri ile her seferinde aynı dizi üretilir.
+
+Bu nedenle CDSNG, kısa vadede “rastgeleymiş gibi” davranan, fakat temelde tamamen kurallı çalışan bir sözde rastgele sayı üretecidir.
+
+----------------------------------------------------
+2. Seed (Başlangıç Değeri) ve Deterministik Yapı
+
+Algoritmanın en önemli girdilerinden biri seed (başlangıç değeri) dir. Seed değeri, üretilecek sayı dizisinin nasıl başlayacağını ve nasıl devam edeceğini doğrudan belirler. 
+
+Bu nedenle:
+- Aynı seed değeri ile algoritma tekrar çalıştırıldığında, tam olarak aynı sayı dizisi elde edilir.
+- Farklı seed değerleri kullanıldığında, farklı sayı dizileri elde edilir.
+
+Bu durum, algoritmanın deterministik olduğunu gösterir. Deterministik yapı, bir anlamda avantaj ve dezavantaj birlikte taşır:
+
+Avantaj:
+- Test, hata ayıklama ve deneysel çalışmalarda aynı sonuçları tekrar tekrar elde edebilmek kolaydır.
+- Simülasyonlarda tekrarlanabilir deney yapmak mümkündür.
+
+Dezavantaj:
+- Güvenlik açısından bakıldığında, bir saldırgan algoritmanın yapısını biliyorsa ve seed’i tahmin edebilirse bütün sayı dizisini yeniden üretebilir.
+- Bu nedenle bu tür basit deterministik üreteçler kriptografik olarak güvenli kabul edilmez.
+
+Sonuç olarak CDSNG, güvenlik kritik sistemlerde (şifreleme anahtarı üretimi, oturum anahtarı üretimi vb.) kullanılmaması gereken, daha çok eğitim ve simülasyon amaçlı bir algoritmadır.
+
+----------------------------------------------------
+3. İstatistiksel Rastgelelik Testleri
+
+Bu bölümde algoritmanın ürettiği sayıların istatistiksel olarak ne kadar “rastgele göründüğünü” incelemek için kullanılan bazı temel testler açıklanmaktadır. Buradaki amaç, algoritmanın gerçek anlamda rastgele olduğunu ispatlamak değil, üretilen sayı dizisinin basit istatistiksel ölçütler açısından kabul edilebilir olup olmadığına bakmaktır.
+
+Bu çalışma kapsamında iki temel test ele alınmıştır:
+- Ortalama (Mean) testi
+- Ki-kare (χ²) dağılım uygunluk testi
+
+İstenirse bunlara ek olarak varyans testi veya artan-azalan sıra (runs) testi gibi başka testler de eklenebilir.
+
+----------------------------------------------------
+3.1. Ortalama (Mean) Testi
+
+İyi bir sözde rastgele sayı üretecinin önemli özelliklerinden biri, ürettiği sayıların belirli bir aralıkta “dengeli” dağılmasıdır. Örneğin üretilen sayıları 0 ile 1 arasına ölçeklersek, teorik olarak bu sayıların ortalamasının 0.5’e yakın olması beklenir.
+
+Bu projede CDSNG tarafından üretilen sayılar önce büyük bir tam sayı aralığında elde edilmekte, ardından 0 ile 1 arasına normalize edilmektedir. Normalizasyon kabaca şu anlama gelir: “Büyük sayıyı, maksimum olabilecek değere bölerek 0 ile 1 arasında bir değere dönüştürmek.”
+
+Ortalama testi şu şekilde yapılmıştır:
+1. Algoritma kullanılarak büyük miktarda (örneğin 10.000 adet) sayı üretilir.
+2. Bu sayılar 0 ile 1 arasına dönüştürülür.
+3. Tüm sayıların aritmetik ortalaması hesaplanır.
+4. Bulunan ortalama değeri, teorik olarak beklenen 0.5 değeri ile karşılaştırılır.
+
+Eğer hesaplanan ortalama 0.5’e yakın bir değerde çıkıyorsa, bu durum üretilen sayıların genel olarak aralık boyunca dengeli dağılma eğiliminde olduğuna dair basit bir işaret olarak kabul edilir. Ancak tek başına ortalama testinin iyi çıkması, algoritmanın tam anlamıyla rastgele veya güvenli olduğunu kanıtlamaz; bu sadece ilk seviye bir kontroldür.
+
+----------------------------------------------------
+3.2. Ki-Kare (χ²) Dağılım Uygunluk Testi
+
+Ki-kare testi, üretilen sayıların beklenen teorik dağılıma ne kadar uyduğunu incelemek için kullanılan istatistiksel bir yöntemdir. Bu projede amaç, CDSNG algoritmasının ürettiği sayılar 0 ile 1 arasında eşit olasılıkla dağılmış varsayılırsa, gerçekte elde edilen dağılımın buna ne kadar benzediğini ölçmektir.
+
+Testin uygulanma adımları özetle şöyledir:
+
+1. Önce algoritma ile belirli sayıda (örneğin 10.000) sayı üretilir ve her biri 0 ile 1 aralığına normalize edilir.
+2. Bu aralık 10 eşit parçaya bölünür:
+   - [0.0, 0.1)
+   - [0.1, 0.2)
+   - ...
+   - [0.9, 1.0)
+3. Her aralıktaki (bin) sayı adedi sayılır. Örneğin 0.0 ile 0.1 arasına düşen kaç sayı var, 0.1 ile 0.2 arasına düşen kaç sayı var gibi.
+4. Toplam üretilen sayı adedi, aralık sayısına bölünerek “beklenen” sayı bulunur. Örneğin 10.000 sayı ve 10 aralık varsa, her aralık için beklenen değer 1.000’dir.
+5. Her aralık için “gözlenen - beklenen” farkı hesaplanır, karesi alınır ve beklenen değere bölünür. Tüm aralıklar için bu değerler toplanarak ki-kare değeri elde edilir.
+6. Bulunan ki-kare değeri, istatistik tablolarındaki kritik değerlerle karşılaştırılır. Bu projede 10 aralık kullanıldığı için serbestlik derecesi 9’dur. 0.05 anlamlılık düzeyi için kritik değer yaklaşık 16.9 civarındadır.
+
+Yorum:
+- Hesaplanan ki-kare değeri, ilgili serbestlik derecesi için kritik değerden küçükse, üretilen sayıların seçilen aralıklar bazında teorik eşit dağılıma “kabul edilebilir düzeyde” benzediği söylenebilir.
+- Eğer ki-kare değeri kritik değerden büyük çıkarsa, bu durum üretilen sayıların dağılımında belirgin dengesizlikler olabileceğine işaret eder.
+
+Bu testin sonucu, CDSNG algoritmasının basit düzeyde istatistiksel olarak “fena olmayan” bir rastgelelik davranışı gösterebileceğini ortaya koyabilir; ancak bu yine de algoritmanın kriptografik açıdan güvenli olduğu anlamına gelmez.
+
+----------------------------------------------------
+4. Genel Değerlendirme ve Sonuç
+
+CDSNG algoritması, seed tabanlı deterministik bir sözde rastgele sayı üretecidir. Kullanılan yapıda her yeni sayı, bir önceki sayının küpü, karesi ve kendisi kullanılarak hesaplanmakta ve mod işlemiyle belirli bir aralıkta tutulmaktadır. Bu yapı, algoritmanın hem hızlı hem de uygulanması kolay olmasını sağlamaktadır.
+
+Yapılan basit istatistiksel testler (ortalama testi ve ki-kare testi) sonucunda, algoritmanın kısa vadede rastgelelik açısından kabul edilebilir bir davranış sergileyebildiği görülmektedir. Bununla birlikte:
+
+- Algoritma deterministiktir; aynı seed ile her zaman aynı sayı dizisini üretir.
+- Matematiksel yapısı görece basittir ve tahmin edilebilirlik riski taşır.
+- Bu nedenle kriptografik anahtar üretimi gibi güvenlik kritik uygulamalarda kullanılması uygun değildir.
+
+Sonuç olarak CDSNG, daha çok eğitim amaçlı ve rastgelelik kavramının anlaşılması için kullanılabilecek bir örnek algoritma olarak değerlendirilebilir. Gerçek güvenlik sistemlerinde, tasarımı ve analizi çok daha kapsamlı yapılmış kriptografik olarak güvenli rastgele sayı üreteçlerinin tercih edilmesi gerekmektedir.
