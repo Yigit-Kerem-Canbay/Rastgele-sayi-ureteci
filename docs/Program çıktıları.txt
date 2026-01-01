@@ -1,0 +1,38 @@
+PS C:\Users\yigit\OneDrive\Masaüstü\bsg2> C:/Users/yigit/OneDrive/Masaüstü/bsg2/.venv/Scripts/python.exe "c:\Users\yigit\OneDrive\Masaüstü\bsg2\sayiüret.py"
+
+Seed değerini gir: 4
+Kaç sayı üretilecek?: 2
+
+QDSNG ile üretilen sayılar:
+659
+16075669
+
+
+PS C:\Users\yigit\OneDrive\Masaüstü\bsg2> C:/Users/yigit/OneDrive/Masaüstü/bsg2/.venv/Scripts/python.exe "c:\Users\yigit\OneDrive\Masaüstü\bsg2\sayiüret.py"
+
+Seed değerini gir: 3
+Kaç sayı üretilecek?: 2
+
+QDSNG ile üretilen sayılar:
+389
+5603179
+
+
+PS C:\Users\yigit\OneDrive\Masaüstü\bsg2> C:/Users/yigit/OneDrive/Masaüstü/bsg2/.venv/Scripts/python.exe "c:\Users\yigit\OneDrive\Masaüstü\bsg2\sayiüret.py"
+
+Seed değerini gir: 12
+Kaç sayı üretilecek?: 12
+
+QDSNG ile üretilen sayılar:
+5483
+1112402029
+658997747
+737159669
+1822446363
+433636765
+890753635
+965422821
+234330955
+973484877
+1747956563
+459682389
