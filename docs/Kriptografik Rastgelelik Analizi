@@ -1,0 +1,69 @@
+PS C:\Users\yigit\OneDrive\Masaüstü\bsg2> & C:/Users/yigit/OneDrive/Masaüstü/bsg2/.venv/Scripts/Activate.ps1
+(.venv) PS C:\Users\yigit\OneDrive\Masaüstü\bsg2> python qdsng_testleri.py
+
+QDSNG ile 10000 sayı üretiliyor...
+
+===== 1) MEAN (ORTALAMA) TESTİ =====
+Beklenen Ortalama : 0.5
+Bizim Ortalama    : 0.49758570794165136
+Fark              : 0.002414292058348644
+Sonuç: ✔ Ortalama değeri iyi, dağılım dengeli görünüyor.
+
+===== 2) Kİ-KARE (χ²) TESTİ =====
+Aralık başına beklenen : 1000.0
+Gerçek Bin değerleri   : [1033, 1016, 976, 996, 1023, 983, 1038, 942, 1002, 991]
+Hesaplanan χ²          : 7.648
+Kritik değer (α=0.05)  : 16.9
+Sonuç: ✔ İyi. Dağılım istatistiksel olarak kabul edilebilir görünüyor.
+
+===== 3) RUNS TESTİ (BAĞIMSIZLIK) =====
+Toplam sayı        : 10000
+Ortalama üstü (1)  : 4989
+Ortalama altı (0)  : 5011
+Beklenen Run Sayısı: 5000.9758
+Gerçek Run Sayısı  : 5015
+Fark               : 14.024199999999837
+Sonuç: ✔ İyi. Bağımsızlık kabul edilebilir görünüyor.
+
+===== 4) HISTOGRAM (0-1 ARASI DAĞILIM) =====
+[0.0, 0.1):  1033 | #################################################
+[0.1, 0.2):  1016 | ################################################
+[0.2, 0.3):   976 | ###############################################
+[0.3, 0.4):   996 | ###############################################
+[0.4, 0.5):  1023 | #################################################
+[0.5, 0.6):   983 | ###############################################
+[0.6, 0.7):  1038 | ##################################################
+[0.7, 0.8):   942 | #############################################
+[0.8, 0.9):  1002 | ################################################
+[0.9, 1.0):   991 | ###############################################
+Not: Çubuklar birbirine yakınsa dağılım daha dengelidir.
+
+===== 5) AUTOCORRELATION TESTİ (lag-1) =====
+Hesaplanan korelasyon r  : 0.0012181062662069912
+Beklenen (ideal) değer   : 0 (bağımsızlık varsayımı)
+Sonuç: ✔ Çok iyi. Ardışık sayılar arasında anlamlı bir ilişki görünmüyor.
+
+===== 6) MONOBIT TEST (BIT SEVİYESİ) =====
+Toplam bit sayısı : 310000
+1 sayısı          : 160248  (0.5169)
+0 sayısı          : 149752  (0.4831)
+Beklenen oran     : 0.5
+1 oranı farkı     : 0.016929032258064525
+Sonuç: ✔ İyi. Bit seviyesinde 0 ve 1 dengeli görünüyor.
+
+===== 7) PERİYOT ÖRNEK TESTİ =====
+Seed: 123456
+50000 adım boyunca tekrar eden state gözlenmedi.
+Not: Bu, periyot en az bu kadar uzun olabilir demektir ama tam periyodu garanti etmez.
+
+===== 8) SEED SENSITIVITY TEST =====
+Kullanılan seed değerleri: (10, 11, 12)
+Her seed için ilk 10 sayı gösteriliyor:
+
+Seed = 10 --> [3833, 543642079, 45149713, 299888791, 506582537, 1354693167, 1006795617, 1481272103, 1692579993, 638113279]
+Seed = 11 --> [4621, 790135571, 788156437, 221991099, 1254004285, 649558659, 1155383301, 1309066219, 1435034349, 1855994483]
+Seed = 12 --> [5483, 1112402029, 658997747, 737159669, 1822446363, 433636765, 890753635, 965422821, 234330955, 973484877]
+
+Yorum:
+- Farklı seed'ler için çıkan diziler birbirinden yeterince farklı olmalıdır.
+- Diziler çok benziyorsa, seed hassasiyeti zayıf demektir.
